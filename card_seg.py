@@ -152,7 +152,8 @@ def Cardseg(rois,colors,save_path):
                     charactor = provinces[int(resp[0]) - PROVINCE_START]
                 else:
                     resp = model_1.predict(part_card)
-                    charactor = chr(resp[0])
+                    print('=====', resp, type(resp))
+                    charactor = chr(int(resp[0]))
                 #判断最后一个数是否是车牌边缘，假设车牌边缘被认为是1
                 if charactor == "1" and i == len(part_cards)-1:
                     if part_card_old.shape[0]/part_card_old.shape[1] >= 7:#1太细，认为是边缘

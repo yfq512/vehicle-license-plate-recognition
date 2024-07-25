@@ -68,6 +68,7 @@ def CaridDetect(car_pic):
     try:
         pic_hight, pic_width = img.shape[:2]
     except AttributeError:
+        print('图像读取错误')
         valid2 = False
     if valid2 == False:
         return 0,0,0,0
@@ -200,7 +201,7 @@ def CaridDetect(car_pic):
 
     # 开始使用颜色定位，排除不是车牌的矩形，目前只识别蓝、绿、黄车牌
     
-    sign, roi,labels, card_color = 0,0,0,0
+    sign, roi, labels, card_color = 0,0,0,0
 
     colors = []
     for card_index,card_img in enumerate(card_imgs):
@@ -285,13 +286,13 @@ def CaridDetect(car_pic):
                 xl = 0
                 xr = col_num
         card_imgs[card_index] = card_img[yl:yh, xl:xr] if color != "green" or yl < (yh-yl)//4 else card_img[yl-(yh-yl)//4:yh, xl:xr]
-
+        cv2.imwrite("./temp/seg_card2.jpg", card_img)
         sign = 1
         roi = card_img
         card_color = color
         labels = (int(right_point[1]), int(heigth_point[1]), int(left_point[0]), int(right_point[0]))
-            
-    return sign, roi,labels, card_color#定位的车牌图像、车牌颜色
+    print('look:  ', sign, roi, labels, card_color)
+    return sign, roi, labels, card_color#定位的车牌图像、车牌颜色
 
 if __name__ == '__main__':
     for pic_file in os.listdir("./test_img"):

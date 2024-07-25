@@ -20,6 +20,7 @@ import cv2
 from car_id_detect import *
 from svm_train import *
 from card_seg import *
+import traceback
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     """
@@ -62,8 +63,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.file_dir = self.file_dir_temp.replace("\\","/")
             print(self.file_dir)
 
-            roi, label, color = CaridDetect(self.file_dir)
-            seg_dict, _, pre = Cardseg([roi],[color],None)
+            _, roi, label, color = CaridDetect(self.file_dir)
+            _, seg_dict, _, pre = Cardseg([roi],[color],None)
             print(pre)
 
             # segment
@@ -104,6 +105,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QtWidgets.QApplication.processEvents()
         
         except Exception as e:
+            ee = traceback.format_exc()
+            print('+++++', ee)
             QMessageBox.warning(self,"错误提示","[错误提示(请联系开发人员处理)]：\n" + str(e)+"\n或识别失败导致")
 
     
@@ -125,9 +128,9 @@ if __name__ == "__main__":
 
     splash.show()
     splash.showMessage('渲染界面...')
-    QThread.sleep(0.6)
+    QThread.sleep(1)
     splash.showMessage('正在初始化程序...')
-    QThread.sleep(0.6)
+    QThread.sleep(1)
     app. processEvents()
     ui =MainWindow()
     ui.show()
